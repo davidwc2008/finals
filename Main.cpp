@@ -2,7 +2,7 @@
 
 using namespace std;
 
-//struct for node
+//struct for nodes
 struct Node {
   Node(int id);
   int ID;
@@ -10,9 +10,9 @@ struct Node {
 };
 
 //this function will add a node with the number 100 before each node that has a '2' integer
-Node* function_A(Node* head);
+void function_A(Node* &head, Node* curr);
 //this function will delete every node that has '2' as an integer
-Node* function_D(Node* head);
+void function_D(Node* curr);
 //this function will print out everything
 void print(Node* head);
 
@@ -23,46 +23,56 @@ Node::Node(int id) {
 }
 
 int main() {
-  Node* node1 = new Node(1); //why are these node pointers
+
+  Node* head = NULL;
+  Node* node1 = new Node(1); //why are these node pointers, creating on the heap
   Node* node2 = new Node(2);
   Node* node3 = new Node(3);
+  //head->next = node1;
   node1->next = node2;
   node2->next = node3;
-  Node* head = NULL;
-  head->next = node1;
+  //node3->next = NULL;
 
   cout << "This is the current linked list: " << endl;
-  print(head);
+  print(node1);
   cout << "There is a linked list with three nodes with integer values 1, 2, and 3 respectively.  The following function will add a node with the number 100 before each node that has a '2' integer" << endl;
-  //  function_A(head);
+  function_A(head, node1);
   cout << "The following function will now delete every node that has '2' as an integer" << endl;
-  // function_D(head);
+  function_D(node1);
+  
   return 0;
 }
 
 void print(Node* head) {
-  if (head == NULL) {
-  }
-  if (head->next != NULL) {
-    cout << head->next << ", " << endl;
+  if (head != NULL) {
+    cout << head->ID << ", " << endl;
     print(head->next);
   }
 }
 
-Node* function_A(Node* head) {
-  if ((head == NULL) || (head->next == NULL)) {
-  } else if (head->next->ID == 2) {
-    //add a node
-    Node* a = new Node(100);
-    a->next = head->next;
-    head->next = a;
-    head = head->next;
+//by iteration (with while loop)
+//need to consider special case of the head
+void function_A(Node* curr) {
+  while(curr != NULL) {
+    if (curr->ID == 2) {
+      Node* a = new Node(100);
+      a->next = curr->next;
+      curr->next = a;
+    }
+    if (curr->ID != 2) {
+    curr = curr->next;
+    } else if (curr->ID == 2) {
+      curr = curr->next->next->next;
+    }
   }
-  function_A(head->next);
-  return head;
 }
 
-Node* function_D(Node* head) {
+//by recursion
+void function_D(Node* curr) {
+  if (curr->next->ID == 2) {
+    Node* todelete = curr;
+    
+
   if ((head == NULL) || (head->next == NULL)) {
   } else if (head->next->ID == 2) {
     Node* todelete = head->next;
